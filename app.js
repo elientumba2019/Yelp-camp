@@ -26,6 +26,17 @@ app.get('/campgrounds' , function(req , res){
 
 
 
+
+//post route for adding a new campground
+app.post('/campgrounds' , function(req , res){
+
+    //get data from the form
+
+    //redirect to the home page
+});
+
+
+
 //listening
 app.listen(3000 , function(){
     console.log('App listening : Server online');
