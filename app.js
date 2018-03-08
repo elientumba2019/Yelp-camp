@@ -1,16 +1,35 @@
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser')
 
-var campArray = require('./temporaryData');//temp data
 
 
 //setting the view engine
 app.set("view engine" , "ejs");
-//static express file
-app.use(express.static('public'))
 //use body parser
 app.use(bodyParser.urlencoded({extended : true}));
+//static express file
+app.use(express.static('public'))
+
+
+
+
+var campgroundsArray = [
+    {
+        name : "Elie's camp",
+        image : "Elie 's image"
+    } , 
+
+    {
+        name : "Elie's camp2",
+        image : "Elie 's image"
+    } , 
+
+    {
+        name : "Elie's camp3",
+        image : "Elie 's image"
+    }
+];
 
 
 
@@ -25,7 +44,7 @@ app.get('/' , function(req , res){
 
 //campground routes
 app.get('/campgrounds' , function(req , res){
-    res.render("campgrounds" , {campgrounds  : campArray});
+    res.render("campgrounds" , {campgrounds  : campgroundsArray});
 });
 
 
@@ -43,9 +62,16 @@ app.get('/campgrounds/new' , function(req , res){
 app.post('/campgrounds' , function(req , res){
 
     //get data from the form
-    res.send("Post route hehe");
+    var nameD = req.body.name;
+    var imageD = req.body.image;
+
+    //push data in the array
+    var newCamp = {name : nameD , image : imageD};
+    console.log(newCamp);
+   campgroundsArray.push(newCamp);
 
     //redirect to the home page
+    res.redirect('/campgrounds');
 });
 
 
