@@ -19,7 +19,7 @@ app.get('/' , function(req , res){
 
 //campground routes
 app.get('/campgrounds' , function(req , res){
-    res.render("campgrounds")
+    res.render("campgrounds" , {campgrounds  : campArray});
 });
 
 
