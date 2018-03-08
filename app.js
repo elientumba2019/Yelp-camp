@@ -33,7 +33,7 @@ app.get('/campgrounds' , function(req , res){
 
 //route for displaying the form that will be used to display the form
 app.get('/campgrounds/new' , function(req , res){
-    res.render('new');
+    res.render('newCamp');
 });
 
 
@@ -43,6 +43,7 @@ app.get('/campgrounds/new' , function(req , res){
 app.post('/campgrounds' , function(req , res){
 
     //get data from the form
+    res.send("Post route hehe");
 
     //redirect to the home page
 });
