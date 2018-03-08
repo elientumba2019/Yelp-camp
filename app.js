@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 
+var campArray = require('./temporaryData');
+
 
 //setting the view engine
 app.set("view engine" , "ejs");
@@ -17,8 +19,9 @@ app.get('/' , function(req , res){
 
 //campground routes
 app.get('/campgrounds' , function(req , res){
-    res.render("Campgrounds")
+    res.render("campgrounds")
 });
+
 
 
 //listening
