@@ -14,6 +14,13 @@ app.get('/' , function(req , res){
 
 
 
+
+//campground routes
+app.get('/campgrounds' , function(req , res){
+    res.render("Campgrounds")
+});
+
+
 //listening
 app.listen(3000 , function(){
     console.log('App listening : Server online');
