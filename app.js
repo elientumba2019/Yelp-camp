@@ -6,6 +6,8 @@ var campArray = require('./temporaryData');
 
 //setting the view engine
 app.set("view engine" , "ejs");
+//static express file
+app.use(express.static('public'))
 
 
 
