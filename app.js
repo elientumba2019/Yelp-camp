@@ -47,23 +47,9 @@ app.get('/campgrounds' , function(req , res){
         }
         else{
             //render
-            res.render("campgrounds" , {campgrounds  : camp});
+            res.render("index" , {campgrounds  : camp});
         }
     }) 
-});
-
-
-
-
-//show route shows info about a campground
-app.get('/campgrounds/:id' , function(req , res){
-
-    //find camp given id
-
-
-
-    //render on screen
-    res.send("Show page ahaah");
 });
 
 
@@ -77,6 +63,24 @@ app.get('/campgrounds/new' , function(req , res){
 
 
 
+//show route shows info about a campground
+app.get('/campgrounds/:id' , function(req , res){
+
+    //find camp given id
+    var idCamp = req.params.id;
+    Campground.findById(idCamp , function(err , foundCamp){
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render('show' , {campground : foundCamp});
+        }
+    });
+
+});
+
+
+
 
 //post route for adding a new campground
 app.post('/campgrounds' , function(req , res){
@@ -84,9 +88,10 @@ app.post('/campgrounds' , function(req , res){
     //get data from the form
     var nameD = req.body.name;
     var imageD = req.body.image;
+    var descD = req.body.description;
 
     //add camp to the database
-    var newCamp = {name : nameD , image : imageD};
+    var newCamp = {name : nameD , image : imageD , description : descD};
     Campground.create(newCamp , function(err , campNew){
         if(err){
             console.log('error');
