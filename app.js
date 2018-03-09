@@ -4,6 +4,8 @@ var bodyParser = require('body-parser')
 var mongoose = require('mongoose');
 
 
+//connecting to the database
+mongoose.connect("mongodb://localhost/yelp_camp");
 
 //setting the view engine
 app.set("view engine" , "ejs");
