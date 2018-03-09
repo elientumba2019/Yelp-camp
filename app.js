@@ -17,22 +17,28 @@ app.use(express.static('public'))
 
 
 
-var campgroundsArray = [
-    {
-        name : "Elie's camp",
-        image : "Elie 's image"
-    } , 
+//schema for the database
+var campgroundSchema = new mongoose.Schema({
+    name : String,
+    image : String
+});
 
-    {
-        name : "Elie's camp2",
-        image : "Elie 's image"
-    } , 
+var Campground = mongoose.model('Campground' , campgroundSchema);
 
-    {
-        name : "Elie's camp3",
-        image : "Elie 's image"
+//test database
+/*
+Campground.create({
+    name : "Hello Camp",
+    image : "hello image"
+} , function(err , camp){
+    if(err){
+        console.log(err);
     }
-];
+    else{
+        console.log(camp);
+    }
+})
+*/
 
 
 
@@ -47,7 +53,17 @@ app.get('/' , function(req , res){
 
 //campground routes
 app.get('/campgrounds' , function(req , res){
-    res.render("campgrounds" , {campgrounds  : campgroundsArray});
+
+    //get camps from the DB
+    Campground.find({} , function(err , camp){
+        if(err){
+            console.log(err);
+        }
+        else{
+            //render
+            res.render("campgrounds" , {campgrounds  : camp});
+        }
+    }) 
 });
 
 
