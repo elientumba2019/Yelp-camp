@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser')
+var mongoose = require('mongoose');
 
 
 
@@ -67,7 +68,6 @@ app.post('/campgrounds' , function(req , res){
 
     //push data in the array
     var newCamp = {name : nameD , image : imageD};
-    console.log(newCamp);
    campgroundsArray.push(newCamp);
 
     //redirect to the home page
