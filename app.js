@@ -84,12 +84,21 @@ app.post('/campgrounds' , function(req , res){
     var nameD = req.body.name;
     var imageD = req.body.image;
 
-    //push data in the array
+    //add camp to the database
     var newCamp = {name : nameD , image : imageD};
-   campgroundsArray.push(newCamp);
+    Campground.create(newCamp , function(err , campNew){
+        if(err){
+            console.log('error');
+            console.log(err);
+        }
+        else{
+            //redirect to the home page
+            res.redirect('/campgrounds');
+        }
+    })
+   
 
-    //redirect to the home page
-    res.redirect('/campgrounds');
+    
 });
 
 
