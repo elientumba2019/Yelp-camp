@@ -20,26 +20,11 @@ app.use(express.static('public'))
 //schema for the database
 var campgroundSchema = new mongoose.Schema({
     name : String,
-    image : String
+    image : String,
+    description : String
 });
 
 var Campground = mongoose.model('Campground' , campgroundSchema);
-
-//test database
-/*
-Campground.create({
-    name : "Hello Camp",
-    image : "hello image"
-} , function(err , camp){
-    if(err){
-        console.log(err);
-    }
-    else{
-        console.log(camp);
-    }
-})
-*/
-
 
 
 
@@ -52,6 +37,7 @@ app.get('/' , function(req , res){
 
 
 //campground routes
+//index route
 app.get('/campgrounds' , function(req , res){
 
     //get camps from the DB
@@ -69,10 +55,25 @@ app.get('/campgrounds' , function(req , res){
 
 
 
+//show route shows info about a campground
+app.get('/campgrounds/:id' , function(req , res){
+
+    //find camp given id
+
+
+
+    //render on screen
+    res.send("Show page ahaah");
+});
+
+
+
+
 //route for displaying the form that will be used to display the form
 app.get('/campgrounds/new' , function(req , res){
     res.render('newCamp');
 });
+
 
 
 
@@ -96,10 +97,9 @@ app.post('/campgrounds' , function(req , res){
             res.redirect('/campgrounds');
         }
     })
-   
 
-    
 });
+
 
 
 
