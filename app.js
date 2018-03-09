@@ -16,15 +16,8 @@ app.use(express.static('public'))
 
 
 
-
-//schema for the database
-var campgroundSchema = new mongoose.Schema({
-    name : String,
-    image : String,
-    description : String
-});
-
-var Campground = mongoose.model('Campground' , campgroundSchema);
+//requesting the models
+var Campground = require('./models/campground');//campground model
 
 
 
