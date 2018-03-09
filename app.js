@@ -18,7 +18,10 @@ app.use(express.static('public'))
 
 //requesting the models
 var Campground = require('./models/campground');//campground model
+var Seed = require('./seed'); //seed file
 
+//seeding the DB
+Seed.seedDB();
 
 
 //landing page
