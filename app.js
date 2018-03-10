@@ -4,11 +4,13 @@ var express     = require("express"),
     mongoose    = require("mongoose"),
     Campground  = require("./models/campground"),
     Comment     = require("./models/comment"),
-    seedDB      = require("./seeds")
+    seedDB      = require("./seeds");
     
+app.use(express.static("public"));
 mongoose.connect("mongodb://localhost/yelp_camp_v4");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
+
 seedDB();
 
 app.get("/", function(req, res){
