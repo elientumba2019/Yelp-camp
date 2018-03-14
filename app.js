@@ -179,6 +179,35 @@ app.post('/register' , (req , res) =>{
 
 
 
+//step 13 addinf the form for login route
+//show the form for handling the login mechanism
+app.get('/login' , (req , res) =>{
+    res.render('login');
+});
+
+
+
+
+//step 14 handle the login form with the middle ware
+//handle login form
+app.post('/login' ,
+//middle ware begin
+ passport.authenticate('local' , {
+    successRedirect : '/campgrounds',
+    failureRedirect : '/login'
+ }), 
+ //middleware end
+
+ //callback
+ (req , res) =>{
+    
+
+});
+
+
+
+
+
 app.listen(3000, function(){
    console.log("The YelpCamp Server Has Started!");
 });
