@@ -4,7 +4,12 @@ var express     = require("express"),
     mongoose    = require("mongoose"),
     Campground  = require("./models/campground"),
     Comment     = require("./models/comment"),
-    seedDB      = require("./seeds")
+    seedDB      = require("./seeds"),
+    passport    = require('passport'),
+    localStrategy = require('passport-local'),
+    User = require('./models/user');
+
+
     
 mongoose.connect("mongodb://localhost/yelp_camp_v4");
 app.use(bodyParser.urlencoded({extended: true}));
