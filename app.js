@@ -152,6 +152,32 @@ app.get('/register' , (req , res) =>{
 
 
 
+//step 10 another route format post
+//handle signup logic
+app.post('/register' , (req , res) =>{
+    
+    var usernameUser = req.body.username;
+    var passwordUser = req.body.password;
+
+    //step 11 using register from pass-local mongoose to register the user with hash
+    var newUser = new User({username : usernameUser})
+
+    User.register(newUser, passwordUser , (err , user) => {
+        if(err){
+            console.log(err);
+            return res.render('register');
+        }
+
+        //step 12 authenticate with passport(log them in)
+        passport.authenticate('local')(req , res , () => {
+            res.redirect('/campgrounds');
+        });
+        
+    });
+});
+
+
+
 
 app.listen(3000, function(){
    console.log("The YelpCamp Server Has Started!");
