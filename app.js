@@ -2,53 +2,35 @@ var express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
+    passport    = require("passport"),
+    LocalStrategy = require("passport-local"),
     Campground  = require("./models/campground"),
     Comment     = require("./models/comment"),
-    seedDB      = require("./seeds"),
-    passport    = require('passport'),
-    localStrategy = require('passport-local'),
-    User = require('./models/user'),
-    expressSession = require('express-session');
-
-
-    //step 1 importing 4 stuff for authentication
-
+    User        = require("./models/user"),
+    seedDB      = require("./seeds")
     
-mongoose.connect("mongodb://localhost/yelp_camp_v4");
+mongoose.connect("mongodb://localhost/yelp_camp_v6");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 seedDB();
 
-
-/******* passport configuration ********** */
-//step 3 do the express  session configuration
-app.use(expressSession({
-    secret : "elientumba hello",
-    resave : false,
-    saveUninitialized : false
+// PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "Once again Rusty wins cutest dog!",
+    resave: false,
+    saveUninitialized: false
 }));
-
-//step 4 do passport initialize
 app.use(passport.initialize());
-
-
-//step 5 do passport session
 app.use(passport.session());
-
-//step 6 do passport use with user authenticate from the plugin
-passport.use(new localStrategy(User.authenticate()));
-
-//step 7 passport serialize
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
-
-
-//step 8 do passport deserialize
 passport.deserializeUser(User.deserializeUser());
 
-
-
-
+app.use(function(req, res, next){
+   res.locals.currentUser = req.user;
+   next();
+});
 
 app.get("/", function(req, res){
     res.render("landing");
@@ -108,7 +90,7 @@ app.get("/campgrounds/:id", function(req, res){
 // COMMENTS ROUTES
 // ====================
 
-app.get("/campgrounds/:id/comments/new", isLoggedIn,  function(req, res){
+app.get("/campgrounds/:id/comments/new", isLoggedIn, function(req, res){
     // find campground by id
     Campground.findById(req.params.id, function(err, campground){
         if(err){
@@ -119,9 +101,7 @@ app.get("/campgrounds/:id/comments/new", isLoggedIn,  function(req, res){
     })
 });
 
-
-
-app.post("/campgrounds/:id/comments", isLoggedIn ,  function(req, res){
+app.post("/campgrounds/:id/comments",isLoggedIn,function(req, res){
    //lookup campground using ID
    Campground.findById(req.params.id, function(err, campground){
        if(err){
@@ -145,91 +125,53 @@ app.post("/campgrounds/:id/comments", isLoggedIn ,  function(req, res){
 });
 
 
+//  ===========
+// AUTH ROUTES
+//  ===========
 
-//step 9 adding an auth route
-//shows the form
-app.get('/register' , (req , res) =>{
-    res.render("register");
+// show register form
+app.get("/register", function(req, res){
+   res.render("register"); 
 });
-
-
-
-//step 10 another route format post
-//handle signup logic
-app.post('/register' , (req , res) =>{
-    
-    var usernameUser = req.body.username;
-    var passwordUser = req.body.password;
-
-    //step 11 using register from pass-local mongoose to register the user with hash
-    var newUser = new User({username : usernameUser})
-
-    User.register(newUser, passwordUser , (err , user) => {
+//handle sign up logic
+app.post("/register", function(req, res){
+    var newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){
         if(err){
             console.log(err);
-            return res.render('register');
+            return res.render("register");
         }
-
-        //step 12 authenticate with passport(log them in)
-        passport.authenticate('local')(req , res , () => {
-            res.redirect('/campgrounds');
+        passport.authenticate("local")(req, res, function(){
+           res.redirect("/campgrounds"); 
         });
-        
     });
 });
 
-
-
-
-//step 13 addinf the form for login route
-//show the form for handling the login mechanism
-app.get('/login' , (req , res) =>{
-    res.render('login');
+// show login form
+app.get("/login", function(req, res){
+   res.render("login"); 
+});
+// handling login logic
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/campgrounds",
+        failureRedirect: "/login"
+    }), function(req, res){
 });
 
-
-
-
-//step 14 handle the login form with the middle ware app.post(route , niddleware , callbaxk)
-//handle login form
-app.post('/login' ,
-//middle ware begin
- passport.authenticate('local' , {
-    successRedirect : '/campgrounds',
-    failureRedirect : '/login'
- }), 
- //middleware end
-
- //callback
- (req , res) =>{
-    
+// logic route
+app.get("/logout", function(req, res){
+   req.logout();
+   res.redirect("/campgrounds");
 });
 
-
-
-
-//step 15 adding logout route
-//logout route
-app.get('/logout' , (req , res) =>{
-    req.logout();
-    res.redirect('/campgrounds');
-});
-
-
-
-
-//step 16
-//add middleware to see if user is logged in before seeing certain information hidden
-function isLoggedIn(req , res , next){
+function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
-        return next;
+        return next();
     }
-    res.redirect('/login');
+    res.redirect("/login");
 }
 
-
-
-
-app.listen(3000, function(){
+app.listen(process.env.PORT, process.env.IP, function(){
    console.log("The YelpCamp Server Has Started!");
 });
