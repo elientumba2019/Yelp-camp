@@ -21,20 +21,29 @@ app.use(require("express-session")({
     resave: false,
     saveUninitialized: false
 }));
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
+
 app.use(function(req, res, next){
    res.locals.currentUser = req.user;
    next();
 });
 
+
+
 app.get("/", function(req, res){
     res.render("landing");
 });
+
+
+
 
 //INDEX - show all campgrounds
 app.get("/campgrounds", function(req, res){
@@ -47,6 +56,9 @@ app.get("/campgrounds", function(req, res){
        }
     });
 });
+
+
+
 
 //CREATE - add new campground to DB
 app.post("/campgrounds", function(req, res){
@@ -66,6 +78,11 @@ app.post("/campgrounds", function(req, res){
     });
 });
 
+
+
+
+
+
 //NEW - show form to create new campground
 app.get("/campgrounds/new", function(req, res){
    res.render("campgrounds/new"); 
@@ -84,6 +101,10 @@ app.get("/campgrounds/:id", function(req, res){
         }
     });
 });
+
+
+
+
 
 
 // ====================
@@ -147,6 +168,9 @@ app.post("/register", function(req, res){
     });
 });
 
+
+
+
 // show login form
 app.get("/login", function(req, res){
    res.render("login"); 
@@ -172,6 +196,6 @@ function isLoggedIn(req, res, next){
     res.redirect("/login");
 }
 
-app.listen(process.env.PORT, process.env.IP, function(){
+app.listen(3000, function(){
    console.log("The YelpCamp Server Has Started!");
 });
