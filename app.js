@@ -7,8 +7,11 @@ var express     = require("express"),
     seedDB      = require("./seeds"),
     passport    = require('passport'),
     localStrategy = require('passport-local'),
-    User = require('./models/user');
+    User = require('./models/user'),
+    expressSession = require('express-session');
 
+
+    //step 1 importing 4 stuff for authentication
 
     
 mongoose.connect("mongodb://localhost/yelp_camp_v4");
@@ -16,6 +19,36 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 seedDB();
+
+
+/******* passport configuration ********** */
+//step 3 do the express  session configuration
+app.use(expressSession({
+    secret : "elientumba hello",
+    resave : false,
+    saveUninitialized : false
+}));
+
+//step 4 do passport initialize
+app.use(passport.initialize());
+
+
+//step 5 do passport session
+app.use(passport.session());
+
+//step 6 do passport use with user authenticate from the plugin
+passport.use(new localStrategy(User.authenticate()));
+
+//step 7 passport serialize
+passport.serializeUser(User.serializeUser());
+
+
+//step 8 do passport deserialize
+passport.deserializeUser(User.deserializeUser());
+
+
+
+
 
 app.get("/", function(req, res){
     res.render("landing");
@@ -108,6 +141,17 @@ app.post("/campgrounds/:id/comments", function(req, res){
    //connect new comment to campground
    //redirect campground show page
 });
+
+
+
+//step 9 adding an auth route
+//shows the form
+app.get('/register' , (req , res) =>{
+    res.render("register");
+});
+
+
+
 
 app.listen(3000, function(){
    console.log("The YelpCamp Server Has Started!");
