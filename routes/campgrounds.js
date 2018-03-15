@@ -1,10 +1,6 @@
-const express = require('express');
-var router = express.Router();
-var Campground = require('../models/campground');
-
-
-
-
+var express = require("express");
+var router  = express.Router();
+var Campground = require("../models/campground");
 
 //INDEX - show all campgrounds
 router.get("/", function(req, res){
@@ -17,9 +13,6 @@ router.get("/", function(req, res){
        }
     });
 });
-
-
-
 
 //CREATE - add new campground to DB
 router.post("/", function(req, res){
@@ -38,11 +31,6 @@ router.post("/", function(req, res){
         }
     });
 });
-
-
-
-
-
 
 //NEW - show form to create new campground
 router.get("/new", function(req, res){
@@ -63,5 +51,5 @@ router.get("/:id", function(req, res){
     });
 });
 
-
 module.exports = router;
+

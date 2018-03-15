@@ -82,7 +82,14 @@ Each Campground has:
 * Add links to navbar
 
 ##Auth Pt. 5 - Show/Hide Links
-* Show/hide auth links in navbar correctly
+* Show/hide auth links in navbar 
+
+##Refactor The Routes
+* Use Express router to reoragnize all routes
+
+##Users + Comments
+* Associate users and comments
+* Save author's name to a comment automatically
 
 
 
