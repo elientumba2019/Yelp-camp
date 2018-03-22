@@ -42,10 +42,15 @@ router.post("/", isLoggedIn ,  function(req, res){
     });
 });
 
+
+
+
 //NEW - show form to create new campground
 router.get("/new", isLoggedIn , function(req, res){
    res.render("campgrounds/new"); 
 });
+
+
 
 // SHOW - shows more info about one campground
 router.get("/:id", function(req, res){
@@ -60,6 +65,42 @@ router.get("/:id", function(req, res){
         }
     });
 });
+
+
+//Edit camp route
+router.get('/:id/edit' , (req, res) =>{
+
+    //getting the camp
+    Campground.findById(req.params.id , (err , foundCamp) =>{
+        if(err){
+            res.render('/campgrounds');
+        }
+        else{
+            res.render('campgrounds/edit' , {campground : foundCamp});
+        }
+    });
+});
+
+
+
+//update camp route
+router.put('/:id' , (req, res) =>{
+
+    var camp = req.body.campground;
+
+    //find camp update if
+    Campground.findByIdAndUpdate(req.params.id , camp , (err , updatedCamp) =>{
+        if(err){
+            res.redirect('/campgrounds');
+        }
+        else{
+            res.redirect('/campgrounds' + req.param.id);
+        }
+    });
+
+    //refirect to the main page
+
+})
 
 
 //middleware
