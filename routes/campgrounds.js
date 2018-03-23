@@ -94,13 +94,28 @@ router.put('/:id' , (req, res) =>{
             res.redirect('/campgrounds');
         }
         else{
+              //refirect to the main page
             res.redirect('/campgrounds' + req.param.id);
         }
     });
 
-    //refirect to the main page
+  
 
-})
+});
+
+
+
+//Desktroy campground route
+router.delete('/:id' , (req , res) =>{
+    Campground.findByIdAndRemove(req.params.id , (err) =>{
+        if(err){
+            res.redirect('/campgrounds');
+        }
+        else{
+            res.redirect('/campgrounds');
+        }
+    })
+});
 
 
 //middleware
