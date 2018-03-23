@@ -3,6 +3,8 @@ var router  = express.Router({mergeParams: true});
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
 
+
+
 //Comments New
 router.get("/new", isLoggedIn, function(req, res){
     // find campground by id
@@ -15,6 +17,10 @@ router.get("/new", isLoggedIn, function(req, res){
         }
     })
 });
+
+
+
+
 
 //Comments Create
 router.post("/",isLoggedIn,function(req, res){
@@ -42,6 +48,42 @@ router.post("/",isLoggedIn,function(req, res){
        }
    });
 });
+
+
+
+
+/*****************  Edit comment ********************** */
+//Edit Comment route
+router.get('/:comment_id/edit' , (req , res) =>{
+    Comment.findById(req.params.comment_id , (err , foundComment) =>{
+        if(err){
+            res.redirect('back');
+        }
+        else{
+            res.render('comments/edit' , {campground_id : req.params.id , comment : foundComment});
+        }
+    });
+   
+});
+
+
+
+
+
+/*******************update comment ***************** */
+router.put('/:comment_id' , (req , res) =>{
+    Comment.findByIdAndUpdate(req.params.comment_id , req.body.comment , (err, updatedComment) =>{
+        if(err){
+            res.redirect('back');
+        }
+        else{
+            res.redirect('/campgrounds/' + req.params.id);
+        }
+    })
+});
+
+
+
 
 //middleware
 function isLoggedIn(req, res, next){
