@@ -24,6 +24,7 @@ app.use(methodOverride("_method"));
 app.use(flash());
 // seedDB(); //seed the database
 
+
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
     secret: "Once again Rusty wins cutest dog!",
@@ -38,6 +39,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(function(req, res, next){
    res.locals.currentUser = req.user;
+   res.locals.error = req.flash('error');
+   res.locals.success = req.flash('success');
    next();
 });
 
